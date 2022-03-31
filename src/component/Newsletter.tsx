@@ -29,10 +29,6 @@ const useStyles = createStyles((theme) => ({
 export default function Newsletter() {
   const { classes } = useStyles();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  let [myEmail, setMyEmail] = useState("");
-
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
 
   const form = useForm({
     initialValues: {
