@@ -1,15 +1,28 @@
 import Document, {
-  DocumentContext,
+  Html,
   Head,
   Main,
   NextScript,
+  DocumentContext,
 } from "next/document";
-import { ServerStyles, createStylesServer } from "@mantine/next";
-
-const stylesServer = createStylesServer();
+import { SheetsRegistry, JssProvider, createGenerateId } from "react-jss";
 
 export default class _Document extends Document {
   static async getInitialProps(ctx: DocumentContext) {
+    const registry = new SheetsRegistry();
+    const generateId = createGenerateId({ minify: true });
+    const originalRenderPage = ctx.renderPage;
+
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) => (props) =>
+          (
+            <JssProvider registry={registry} generateId={generateId}>
+              <App {...props} />
+            </JssProvider>
+          ),
+      });
+
     const initialProps = await Document.getInitialProps(ctx);
 
     return {
@@ -17,21 +30,23 @@ export default class _Document extends Document {
       styles: (
         <>
           {initialProps.styles}
-          <ServerStyles html={initialProps.html} server={stylesServer} />
+          <style id="mantine-ssr-styles">{registry.toString()}</style>
         </>
       ),
     };
   }
+
   render() {
     return (
-      <html lang="pt-br">
-        <Head>{this.props.styles}</Head>
+      <Html>
+        <Head>
+          <link rel="icon" href="link to favicon" />
+        </Head>
         <body>
           <Main />
-          <div />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
