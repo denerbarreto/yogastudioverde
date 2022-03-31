@@ -1,7 +1,8 @@
+import { GetServerSidePropsContext } from "next";
 import { MantineProvider } from "@mantine/core";
 import { AppProps } from "next/app";
+import { getCookie, setCookies } from "cookies-next";
 import { Global } from "../src/component";
-
 import "../src/styles/font.css";
 
 export default function App(props: AppProps) {
@@ -33,3 +34,7 @@ export default function App(props: AppProps) {
     </MantineProvider>
   );
 }
+
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+  colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
+});
