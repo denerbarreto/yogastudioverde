@@ -1,4 +1,9 @@
-import Document, { DocumentContext } from "next/document";
+import Document, {
+  DocumentContext,
+  Head,
+  Main,
+  NextScript,
+} from "next/document";
 import { ServerStyles, createStylesServer } from "@mantine/next";
 
 const stylesServer = createStylesServer();
@@ -16,5 +21,17 @@ export default class _Document extends Document {
         </>
       ),
     };
+  }
+  render() {
+    return (
+      <html lang="pt-br">
+        <Head>{this.props.styles}</Head>
+        <body>
+          <Main />
+          <div />
+          <NextScript />
+        </body>
+      </html>
+    );
   }
 }
