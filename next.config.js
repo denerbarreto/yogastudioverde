@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
 };
 
 module.exports = {
-  images: {
-    domains: ["images.unsplash.com", "cdn.sanity.io"],
+  i18n: {
+    locales: ["pt-br"],
+    defaultLocale: "pt-br",
   },
 
   nextConfig,
