@@ -8,9 +8,12 @@ import {
   Paper,
   Transition,
   Image,
+  useMantineTheme,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
+import Link from "next/link";
 import logo from "../assets/logo.svg";
+import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 120;
 
@@ -95,25 +98,33 @@ interface HeaderResponsiveProps {
 }
 
 export default function HeaderResponsive({ links }: HeaderResponsiveProps) {
+  const theme = useMantineTheme();
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(links[0].link);
+  const router = useRouter();
 
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-      onClick={() => {
-        setActive(link.link);
-        toggleOpened(false);
-      }}
-    >
-      {link.label}
-    </a>
-  ));
+  let items = {};
+  <ul>
+    {
+      (items = links.map((link) => (
+        <li key={link.label} style={{ listStyle: "none" }}>
+          <Link href={link.link}>
+            <a
+              className={classes.link}
+              style={
+                router.pathname == link.link
+                  ? { color: theme.colors[theme.primaryColor][3] }
+                  : { color: theme.white }
+              }
+            >
+              {link.label}
+            </a>
+          </Link>
+        </li>
+      )))
+    }
+  </ul>;
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
